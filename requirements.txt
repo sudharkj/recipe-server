@@ -1,0 +1,5 @@
+flask==1.0.2
+flask_restful==0.3.6
+requests==2.21.0
+configparser==3.5.0
+google-cloud-vision==0.35.2
