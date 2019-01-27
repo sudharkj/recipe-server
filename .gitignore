@@ -1,2 +1,7 @@
-/__pycache__
+# Files containing sensitive information
+/resources/sensitive.ini
 
+# Language or IDE or OS generated
+/.idea
+**/__pycache__
+.DS_Store
