@@ -6,7 +6,6 @@ import os
 class Config:
     """
     Load related configs.
-
     TODO make this singleton
     """
     PARENT_DIR = 'resources/'
@@ -30,3 +29,4 @@ class Config:
     @property
     def app_config(self):
         return self._app_config
+        
