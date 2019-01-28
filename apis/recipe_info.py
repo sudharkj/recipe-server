@@ -20,13 +20,13 @@ class RecipeInfo(Resource):
 
         self.max_results = app_config.get('RECIPE_API', 'max-results')
         
-        recipe_app_credentials = current_app.config['APP_CONFIG'].get('SECRET', 'keys-file-location')
+        recipe_app_credentials = current_app.config['APP_CONFIG']
         
-        self.recipe_app_id = recipe_app_credentials['RECIPE_API_CONFIG']['RECIPE_APP_ID']
-        self.recipe_app_key = recipe_app_credentials['RECIPE_API_CONFIG']['RECIPE_APP_KEY']
+        self.recipe_app_id = recipe_app_credentials.get('RECIPE_API_CONFIG','RECIPE_APP_ID')
+        self.recipe_app_key = recipe_app_credentials.get('RECIPE_API_CONFIG','RECIPE_APP_KEY')
         print('Initialized api/recipe-info handlers')
 
-    def get(self, recipe_name):
+    def get(self):
         """
         Returns the recipe information from the uri.
         : returns: Top results of the recipe information using the recipe name.
@@ -37,4 +37,4 @@ class RecipeInfo(Resource):
         if request.args['recipe_name'] is None or request.args['recipe_name'] == '':
             raise ValueError(self.EMPTY_RECIPE_NAME_ARG)
 
-        return self.get_recipe_info(self.recipe_app_id, self.recipe_app_key, recipe_name, max_results=int(self.max_results))
+        return self.get_recipe_info(self.recipe_app_id, self.recipe_app_key, request.args['recipe_name'], max_results=int(self.max_results))

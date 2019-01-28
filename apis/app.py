@@ -13,6 +13,3 @@ api = Api(api_bp)
 api.add_resource(recipe_name, '/recipe-name')
 
 api.add_resource(recipe_info, '/recipe-info')
-
-def __init__():
-    None

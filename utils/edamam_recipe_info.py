@@ -1,6 +1,6 @@
 # utils/edamam_recipe_info.py
 
-from flask import request
+import requests
 
 EMPTY_ARGS = 'Api edamam.recipe-info needs some search query and none provided.'
 EMPTY_CREDENTIALS = 'Check the Api Edamam recipe credentials.'
@@ -20,10 +20,10 @@ def get_recipe_info(recipe_app_id, recipe_app_key, recipe_name, max_results=5):
     if recipe_app_id is None or recipe_app_id == '' or recipe_app_key is None or recipe_app_key == '':
         raise ValueError(EMPTY_CREDENTIALS)
 
-    connect_url = 'https://api.edamam.com/search?q={0}&app_id={1}&app_key={2}&from=0&to={3}'.strip('"\'')
+    connect_url = 'https://api.edamam.com/search?q={0}&app_id={1}&app_key={2}&from=0&to={3}'
     url = connect_url.format(recipe_name, recipe_app_id, recipe_app_key, max_results)
     
-    response_obj = request.get(url)
+    response_obj = requests.get(url)
 
     recipes_info = []
     if response_obj:
@@ -33,12 +33,12 @@ def get_recipe_info(recipe_app_id, recipe_app_key, recipe_name, max_results=5):
 
         for response in response_text:
             recipe = response['recipe']
-            recipes = dict()
-            recipes['label'] = recipe['label']
+            recipe_info = dict()
+            recipe_info['label'] = recipe['label']
 
             for recipe_col in recipe_columns:
-                recipes[recipe_col] = recipe[recipe_col]
-            recipes_info.append(recipes)
+                recipe_info[recipe_col] = recipe[recipe_col]
+            recipes_info.append(recipe_info)
     else:
         print('No recipe found for the search query')
 
