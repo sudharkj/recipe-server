@@ -37,4 +37,4 @@ def get_best_guess(uri=None, content=None, max_results=10):
     else:
         print('0 Web entities found.')
 
-    return recipe_names
+    return recipe_names if len(recipe_names) > 0 else response

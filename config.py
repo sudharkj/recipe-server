@@ -1,6 +1,7 @@
 # resources.py
 import configparser
 import os
+import sys, traceback
 
 
 class Config:
@@ -12,9 +13,7 @@ class Config:
 
     def __init__(self):
         dir = os.listdir(self.PARENT_DIR)
-        files = []
-        for file in dir:
-            files.append(self.PARENT_DIR + file)
+        files = [self.PARENT_DIR + file for file in dir if file.endswith('.ini')]
         self._app_config = configparser.ConfigParser()
         self._app_config.read(files)
 
@@ -22,8 +21,11 @@ class Config:
         secret_parser = configparser.ConfigParser()
         secret_parser.read(self._app_config.get('SECRET', 'keys-file-location'))
         for section in secret_parser.sections():
-            self._app_config.add_section(section)
-            for (key, value) in  secret_parser.items(section):
+            try:
+                self._app_config.add_section(section)
+            except:
+                traceback.print_exc(file=sys.stdout)
+            for (key, value) in secret_parser.items(section):
                 self._app_config.set(section, key, value)
 
     @property

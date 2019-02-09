@@ -1,6 +1,9 @@
 # apis/recipe_name.py
 from flask import request, current_app
 from flask_restful import Resource
+import json
+import traceback
+import sys
 
 from utils.helper import load_modules
 
@@ -40,7 +43,17 @@ class RecipeName(Resource):
         Returns best guess of recipe names from image binary content
         :return: recipe names
         """
-        if request.data is None or request.data == '':
-            raise ValueError(self.EMPTY_IMAGE_CONTENT)
-
-        return self.get_best_guess(content=request.data, max_results=int(self.max_results))
+        # return {'response': 'success'}
+        # if request.json is None or request.json['content'] == '':
+        #     raise ValueError(self.EMPTY_IMAGE_CONTENT)
+        #
+        try:
+            json_data = request.json['content'] if request.json is not None and request.json['content'] is not None and request.json['content'] != '' else ""
+            print('content value:', json_data)
+            json_data = json_data if json_data != '' else json.loads(request.data)
+            print('data value:', json_data)
+            response = self.get_best_guess(content=json_data.encode('utf-8'), max_results=int(self.max_results))
+        except Exception:
+            traceback.print_exception(sys.exc_info())
+            response = {'response': 'success'}
+        return response

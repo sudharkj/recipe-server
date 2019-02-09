@@ -20,7 +20,7 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = app.config['APP_CONFIG'].get('SEC
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return 'Kill Me!'
 
 
 # register api blueprint
@@ -29,4 +29,3 @@ app.register_blueprint(api_bp, url_prefix='/api')
 
 if __name__ == '__main__':
     app.run()
-    
