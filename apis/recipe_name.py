@@ -4,6 +4,7 @@ from flask_restful import Resource
 import json
 import traceback
 import sys
+import base64
 
 from utils.helper import load_modules
 
@@ -47,13 +48,17 @@ class RecipeName(Resource):
         # if request.json is None or request.json['content'] == '':
         #     raise ValueError(self.EMPTY_IMAGE_CONTENT)
         #
+
+        # if request.data is None or request.data == '':
+        #     raise ValueError(self.EMPTY_IMAGE_CONTENT)
+        #
+        # return self.get_best_guess(content=request.data, max_results=int(self.max_results))
         try:
             json_data = request.json['content'] if request.json is not None and request.json['content'] is not None and request.json['content'] != '' else ""
             print('content value:', json_data)
-            json_data = json_data if json_data != '' else json.loads(request.data)
-            print('data value:', json_data)
-            response = self.get_best_guess(content=json_data.encode('utf-8'), max_results=int(self.max_results))
+            print('image value:', json_data.decode('UTF-8'))
+            response = self.get_best_guess(content=json_data.decode('UTF-8'), max_results=int(self.max_results))
         except Exception:
-            traceback.print_exception(sys.exc_info())
+            traceback.print_exception(*sys.exc_info())
             response = {'response': 'success'}
         return response

@@ -24,8 +24,15 @@ def get_best_guess(uri=None, content=None, max_results=10):
         image.source.image_uri = uri
     else:
         image = vision.types.Image(content=content)
+        print(image)
+    fh = open("imageToSave.png", "wb")
+    fh.write(content)
+    fh.close()
 
     response = client.web_detection(image=image)
+    if response.error is not None:
+        return {'message': response.error.message}
+
     annotations = response.web_detection
 
     recipe_names = []
@@ -37,4 +44,4 @@ def get_best_guess(uri=None, content=None, max_results=10):
     else:
         print('0 Web entities found.')
 
-    return recipe_names if len(recipe_names) > 0 else response
+    return {'labels': recipe_names}
